@@ -23,8 +23,13 @@ soup = BeautifulSoup(html, 'html.parser')
 tag = 'Results-table-row'
 store = []
 for row in  soup.findAll('tr', tag):
-    store.append(row.attrs)
+    data = row.attrs
+    for t in row.findAll('td','Results-table-td Results-table-td--time'):
+        for j in t.findAll('div','compact'):
+            data['time'] = j.text
+    store.append(data)
+
 
 df = pd.DataFrame(store)
-print(df)
+# print(df)
 df.to_csv('./table.csv',index=False)
